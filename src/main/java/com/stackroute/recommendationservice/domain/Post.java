@@ -3,6 +3,7 @@ package com.stackroute.recommendationservice.domain;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Set;
 
 import lombok.*;
 import org.neo4j.ogm.annotation.GeneratedValue;
@@ -24,6 +25,8 @@ public class Post {
 	private Long videoID;
 	private String title;
 	private String videoURL;
-	private String[] categories;
+	private String category;
 	private List<String> tags;
+	@Relationship(type = "NEWS_LOCATION", direction = Relationship.OUTGOING)
+	private Location location;
 }

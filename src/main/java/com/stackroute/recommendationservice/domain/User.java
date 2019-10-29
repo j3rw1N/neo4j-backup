@@ -1,6 +1,7 @@
 package com.stackroute.recommendationservice.domain;
 
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -23,12 +24,14 @@ import org.neo4j.ogm.annotation.Relationship;
 public class User {
 
 	@Id
-	private String userName;
-	//private String name;
+	private String username;
+	private String name;
 	//private String[] interests;
 	//private String gender;
 	//private String location;
-	//private Date dob;
+	private String email;
+	private Date dateOfBirth;
+	private Set<String> newsPreferences;
 	@Relationship(type = "PUBLISHED", direction = Relationship.OUTGOING)
 	private Set<Post> publishedPosts;
 

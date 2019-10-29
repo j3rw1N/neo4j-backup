@@ -3,9 +3,7 @@ package com.stackroute.recommendationservice.services;
 import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.stackroute.recommendationservice.domain.Post;
-import com.stackroute.recommendationservice.domain.PostDTO;
-import com.stackroute.recommendationservice.domain.User;
+import com.stackroute.recommendationservice.domain.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -24,15 +22,22 @@ public class RabbitMqReceiver {
     public void receivePosts(String message) {
         PostDTO postDTO;
         try {
+            System.out.println(message);
             postDTO = new ObjectMapper().readValue(message, PostDTO.class);
+            System.out.println("after mapped");
             Post post = Post.builder()
                     .videoID(postDTO.getId())
                     .title(postDTO.getTitle())
                     .videoURL(postDTO.getVideoUrl())
+                    .category(postDTO.getCategory())
+                    .location(new Location(postDTO.getLocation(), null, null))
                     .tags(postDTO.getTags())
                     .build();
             System.out.println(postDTO.toString());
-            User user = queryService.getUser(postDTO.getPostedBy().getUserName());
+            User user = queryService.getUser(postDTO.getPostedBy().getUsername());
+            if(user == null) {
+                return;
+            }
             if(user.getPublishedPosts()!=null) {
                 user.getPublishedPosts().add(post);
             } else {
@@ -47,10 +52,14 @@ public class RabbitMqReceiver {
     }
 
     public void receiveUsers(String message) {
+        UserDTO userDTO = null;
         User user = null;
         try {
             System.out.println(message);
-            user = new ObjectMapper().readValue(message, User.class);
+            userDTO = new ObjectMapper().readValue(message, UserDTO.class);
+            user = User.builder()
+                    .username(userDTO.getUsername())
+                    .build();
         } catch (IOException e) {
             e.printStackTrace();
         }

@@ -26,4 +26,8 @@ public interface NewsRepository extends Neo4jRepository<Post, Long> {
 			"\t\t\t\tWHERE not recommend in viewedNews\n" +
 			"\t\t\t\t\treturn DISTINCT recommend")
 	Collection<Post> recommend(@Param("userName") String userName);
+
+
+	@Query("MATCH (l:Location) where l.name={name} MATCH (p:Post)-[:NEWS_LOCATION]->(l) return p")
+    Collection<Post> byLocation(@Param("name") String name);
 }

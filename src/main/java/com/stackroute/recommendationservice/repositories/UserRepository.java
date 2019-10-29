@@ -10,7 +10,7 @@ import java.util.Collection;
 
 public interface UserRepository extends Neo4jRepository<User, Long> {
 
-    User findByUserName(String name);
+    User findByUsername(String name);
 
     @Query("match (u:User) where n.videoID=1 match (u:User)-[:Viewed]->(n) return u")
     Collection<User> graph(@Param("videoID") int videoId);

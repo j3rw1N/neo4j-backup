@@ -8,14 +8,15 @@ import org.springframework.amqp.core.TopicExchange;
 import org.springframework.amqp.rabbit.connection.ConnectionFactory;
 import org.springframework.amqp.rabbit.listener.SimpleMessageListenerContainer;
 import org.springframework.amqp.rabbit.listener.adapter.MessageListenerAdapter;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 @Configuration
 public class RabbitMqUserConfig {
-    public static final String topicExchangeName = "user-auth";
+    private static final String topicExchangeName = "user-auth";
 
-    public static final String queueName = "neo4jUserReg";
+    private static final String queueName = "user2";
 
     @Bean
     Queue queue() {
@@ -28,13 +29,13 @@ public class RabbitMqUserConfig {
     }
 
     @Bean
-    Binding binding(Queue queue, TopicExchange exchange) {
+    Binding binding(@Qualifier("queue")Queue queue, TopicExchange exchange) {
         return BindingBuilder.bind(queue).to(exchange).with("user.auth.#");
     }
 
     @Bean
     SimpleMessageListenerContainer container(ConnectionFactory connectionFactory,
-                                             MessageListenerAdapter listenerAdapter) {
+                                             @Qualifier("listenerAdapter")MessageListenerAdapter listenerAdapter) {
         SimpleMessageListenerContainer container = new SimpleMessageListenerContainer();
         container.setConnectionFactory(connectionFactory);
         container.setQueueNames(queueName);

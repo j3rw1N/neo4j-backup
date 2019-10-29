@@ -41,5 +41,10 @@ public class GraphController {
 	}
 
 
+	@GetMapping("/location/{name}")
+	public Collection<Post> byLocation(@PathVariable(value = "name") String name) {
+		return queryService.byLocation(name);
+	}
+
 
 }

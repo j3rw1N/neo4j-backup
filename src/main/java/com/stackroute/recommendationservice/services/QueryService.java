@@ -32,11 +32,15 @@ public class QueryService {
 
     @Transactional
     public User getUser(String userName) {
-        return userRepository.findByUserName(userName);
+        return userRepository.findByUsername(userName);
     }
 
     @Transactional
     public void saveUser(User user) {
         userRepository.save(user);
+    }
+
+    public Collection<Post> byLocation(String name) {
+        return newsRepository.byLocation(name);
     }
 }
