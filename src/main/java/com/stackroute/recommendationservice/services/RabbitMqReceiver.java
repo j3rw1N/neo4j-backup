@@ -49,6 +49,7 @@ public class RabbitMqReceiver {
     public void receiveUsers(String message) {
         User user = null;
         try {
+            System.out.println(message);
             user = new ObjectMapper().readValue(message, User.class);
         } catch (IOException e) {
             e.printStackTrace();
