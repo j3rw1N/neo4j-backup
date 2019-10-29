@@ -14,9 +14,9 @@ import org.springframework.context.annotation.Configuration;
 @Configuration
 public class RabbitMqPostConfig {
 
-    public static final String topicExchangeName = "user-auth";
+    public static final String topicExchangeName = "post";
 
-    public static final String queueName = "neo4jUserReg";
+    public static final String queueName = "neo4jPost";
 
     @Bean
     Queue queue() {
@@ -30,7 +30,7 @@ public class RabbitMqPostConfig {
 
     @Bean
     Binding binding(Queue queue, TopicExchange exchange) {
-        return BindingBuilder.bind(queue).to(exchange).with("user.auth.#");
+        return BindingBuilder.bind(queue).to(exchange).with("post");
     }
 
     @Bean
@@ -45,7 +45,7 @@ public class RabbitMqPostConfig {
 
     @Bean
     MessageListenerAdapter listenerAdapter(RabbitMqReceiver receiver) {
-        return new MessageListenerAdapter(receiver, "receiveNews");
+        return new MessageListenerAdapter(receiver, "receivePosts");
     }
 
 }

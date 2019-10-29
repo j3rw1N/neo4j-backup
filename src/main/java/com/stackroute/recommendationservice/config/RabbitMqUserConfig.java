@@ -9,7 +9,9 @@ import org.springframework.amqp.rabbit.connection.ConnectionFactory;
 import org.springframework.amqp.rabbit.listener.SimpleMessageListenerContainer;
 import org.springframework.amqp.rabbit.listener.adapter.MessageListenerAdapter;
 import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
 
+@Configuration
 public class RabbitMqUserConfig {
     public static final String topicExchangeName = "user-auth";
 
@@ -42,6 +44,6 @@ public class RabbitMqUserConfig {
 
     @Bean
     MessageListenerAdapter listenerAdapter(RabbitMqReceiver receiver) {
-        return new MessageListenerAdapter(receiver, "receiveNews");
+        return new MessageListenerAdapter(receiver, "receiveUsers");
     }
 }

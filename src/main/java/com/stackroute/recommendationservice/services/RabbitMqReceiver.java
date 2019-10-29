@@ -21,7 +21,7 @@ public class RabbitMqReceiver {
     @Autowired
     QueryService queryService;
 
-    public void receiveNews(String message) {
+    public void receivePosts(String message) {
         PostDTO postDTO;
         try {
             postDTO = new ObjectMapper().readValue(message, PostDTO.class);
@@ -44,6 +44,16 @@ public class RabbitMqReceiver {
         } catch (IOException e) {
             e.printStackTrace();
         }
+    }
+
+    public void receiveUsers(String message) {
+        User user = null;
+        try {
+            user = new ObjectMapper().readValue(message, User.class);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        queryService.saveUser(user);
     }
 
 }
