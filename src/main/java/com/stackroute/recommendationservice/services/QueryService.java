@@ -1,6 +1,6 @@
 package com.stackroute.recommendationservice.services;
 
-import com.stackroute.recommendationservice.domain.News;
+import com.stackroute.recommendationservice.domain.Post;
 import com.stackroute.recommendationservice.domain.User;
 import com.stackroute.recommendationservice.repositories.NewsRepository;
 import com.stackroute.recommendationservice.repositories.UserRepository;
@@ -8,8 +8,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Collection;
-import java.util.Iterator;
-import java.util.Map;
 
 @Service
 public class QueryService {
@@ -28,13 +26,17 @@ public class QueryService {
 
 
     @Transactional(readOnly = true)
-    public Collection<News> findByTitleLike(String title) {
-        Collection<News> result = newsRepository.findByTitleLike(title);
-        Iterator<News> iterator = result.iterator();
-        while (iterator.hasNext()) {
-            News news = iterator.next();
-            System.out.println(news.getTitle());
-        }
-        return result;
+    public Collection<Post> findByTitleLike(String title) {
+        return newsRepository.findByTitleLike(title);
+    }
+
+    @Transactional
+    public User getUser(String userName) {
+        return userRepository.findByUserName(userName);
+    }
+
+    @Transactional
+    public void saveUser(User user) {
+        userRepository.save(user);
     }
 }

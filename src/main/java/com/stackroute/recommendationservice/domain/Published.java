@@ -1,12 +1,10 @@
 package com.stackroute.recommendationservice.domain;
 
-import org.neo4j.ogm.annotation.EndNode;
-import org.neo4j.ogm.annotation.GeneratedValue;
-import org.neo4j.ogm.annotation.Id;
-import org.neo4j.ogm.annotation.StartNode;
+import org.neo4j.ogm.annotation.*;
 
 import java.util.Date;
 
+@RelationshipEntity(type = "PUBLISHED")
 public class Published {
     @Id
     @GeneratedValue
@@ -16,16 +14,17 @@ public class Published {
     private User person;
 
     @EndNode
-    private News news;
+    private Post post;
 
     private Date publishedDate;
 
     public Published() {
     }
 
-    public Published(News news, User actor) {
-        this.news = news;
+    public Published(Post post, User actor, Date publishedDate) {
+        this.post = post;
         this.person = actor;
+        this.publishedDate = publishedDate;
     }
 
     public Long getId() {
@@ -36,7 +35,11 @@ public class Published {
         return person;
     }
 
-    public News getNews() {
-        return news;
+    public Post getPost() {
+        return post;
+    }
+
+    public Date getPublishedDate() {
+        return this.publishedDate;
     }
 }

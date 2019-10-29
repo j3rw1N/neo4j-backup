@@ -12,11 +12,11 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 @Configuration
-public class RabbitMqConfig {
+public class RabbitMqPostConfig {
 
     public static final String topicExchangeName = "user-auth";
 
-    public static final String queueName = "user2";
+    public static final String queueName = "neo4jUserReg";
 
     @Bean
     Queue queue() {
@@ -45,7 +45,7 @@ public class RabbitMqConfig {
 
     @Bean
     MessageListenerAdapter listenerAdapter(RabbitMqReceiver receiver) {
-        return new MessageListenerAdapter(receiver, "receiveMessage");
+        return new MessageListenerAdapter(receiver, "receiveNews");
     }
 
 }

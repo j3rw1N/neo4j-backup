@@ -1,9 +1,5 @@
 package com.stackroute.recommendationservice.domain;
 
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-
 import org.neo4j.ogm.annotation.*;
 
 
@@ -18,14 +14,14 @@ public class Viewed {
 	private User person;
 
 	@EndNode
-	private News news;
+	private Post news;
 
 	//private Date viewedDate;
 
 	public Viewed() {
 	}
 
-	public Viewed(News news, User person) {
+	public Viewed(Post news, User person) {
 		this.news = news;
 		this.person = person;
 	}
@@ -38,7 +34,7 @@ public class Viewed {
 	    return person;
 	}
 
-	public News getNews() {
+	public Post getNews() {
 	    return news;
 	}
 

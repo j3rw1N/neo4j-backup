@@ -2,7 +2,7 @@ package com.stackroute.recommendationservice.services;
 
 import java.util.*;
 
-import com.stackroute.recommendationservice.domain.News;
+import com.stackroute.recommendationservice.domain.Post;
 import com.stackroute.recommendationservice.repositories.NewsRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -21,15 +21,15 @@ public class RecommendationService {
 
 
 	@Transactional(readOnly = true)
-	public Collection<News> recommend(String userId) {
+	public Collection<Post> recommend(String userId) {
 		return newsRepository.recommend(userId);
 	}
 
-	private Map<String, Object> toD3Format(Collection<News> newsCollection) {
+	private Map<String, Object> toD3Format(Collection<Post> newsCollection) {
 		List<Map<String, Object>> nodes = new ArrayList<>();
 		List<Map<String, Object>> rels = new ArrayList<>();
 		int i = 0;
-		Iterator<News> result = newsCollection.iterator();
+		Iterator<Post> result = newsCollection.iterator();
 		while (result.hasNext()) {
 
 		}
@@ -44,20 +44,18 @@ public class RecommendationService {
 	}
 
     @Transactional(readOnly = true)
-    public News findByTitle(String title) {
-        News result = newsRepository.findByTitle(title);
-        return result;
+    public Post findByTitle(String title) {
+		return newsRepository.findByTitle(title);
     }
 
     @Transactional(readOnly = true)
-    public Collection<News> findByTitleLike(String title) {
-        Collection<News> result = newsRepository.findByTitleLike(title);
-        return result;
+    public Collection<Post> findByTitleLike(String title) {
+		return newsRepository.findByTitleLike(title);
     }
 
 	@Transactional(readOnly = true)
-	public Map<String, Object>  graph(int limit) {
-		Collection<News> result = newsRepository.graph(limit);
+	public Map<String, Object> graph(int limit) {
+		Collection<Post> result = newsRepository.graph(limit);
 		return toD3Format(result);
 	}
 }

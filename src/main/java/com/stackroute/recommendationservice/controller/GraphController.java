@@ -3,7 +3,7 @@ package com.stackroute.recommendationservice.controller;
 import java.util.Collection;
 import java.util.Map;
 
-import com.stackroute.recommendationservice.domain.News;
+import com.stackroute.recommendationservice.domain.Post;
 import com.stackroute.recommendationservice.domain.User;
 import com.stackroute.recommendationservice.services.QueryService;
 import com.stackroute.recommendationservice.services.RecommendationService;
@@ -28,8 +28,8 @@ public class GraphController {
 
 
 	@GetMapping("/recommend/{id}")
-	public Collection<News> recommend(@PathVariable(value = "id") String userId) {
-		Collection<News> result = recommendationService.recommend(userId);
+	public Collection<Post> recommend(@PathVariable(value = "id") String userId) {
+		Collection<Post> result = recommendationService.recommend(userId);
 		return result;
 	}
 
@@ -39,5 +39,7 @@ public class GraphController {
 		Collection<User> users = queryService.graph(videoId);
 		return users;
 	}
+
+
 
 }
