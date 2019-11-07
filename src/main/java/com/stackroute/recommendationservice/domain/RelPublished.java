@@ -5,7 +5,7 @@ import org.neo4j.ogm.annotation.*;
 import java.util.Date;
 
 @RelationshipEntity(type = "PUBLISHED")
-public class Published {
+public class RelPublished {
     @Id
     @GeneratedValue
     private Long id;
@@ -18,10 +18,10 @@ public class Published {
 
     private Date publishedDate;
 
-    public Published() {
+    public RelPublished() {
     }
 
-    public Published(Post post, User actor, Date publishedDate) {
+    public RelPublished(Post post, User actor, Date publishedDate) {
         this.post = post;
         this.person = actor;
         this.publishedDate = publishedDate;

@@ -2,6 +2,7 @@ package com.stackroute.recommendationservice.controller;
 
 import java.util.Collection;
 import java.util.Map;
+import java.util.concurrent.ExecutionException;
 
 import com.stackroute.recommendationservice.domain.Post;
 import com.stackroute.recommendationservice.domain.User;
@@ -21,16 +22,15 @@ public class GraphController {
 		this.queryService = queryService;
 	}
 
-    @GetMapping("/graph")
-	public Map<String, Object> graph(@RequestParam(value = "limit",required = false) Integer limit) {
-		return recommendationService.graph(limit == null ? 100 : limit);
-	}
+//    @GetMapping("/graph")
+//	public Map<String, Object> graph(@RequestParam(value = "limit",required = false) Integer limit) {
+//		return recommendationService.graph(limit == null ? 100 : limit);
+//	}
 
 
 	@GetMapping("/recommend/{id}")
-	public Collection<Post> recommend(@PathVariable(value = "id") String userId) {
-		Collection<Post> result = recommendationService.recommend(userId);
-		return result;
+	public Collection<Post> recommend(@PathVariable(value = "id") String userId) throws ExecutionException, InterruptedException {
+		return recommendationService.recommend(userId);
 	}
 
 	@GetMapping("/news/{id}")
@@ -46,5 +46,18 @@ public class GraphController {
 		return queryService.byLocation(name);
 	}
 
+	@GetMapping("/addToViewed/{id}/{name}")
+	public String addToViewed(@PathVariable(value = "id") String id, @PathVariable(value = "name") String name) {
+		Long videoId = Long.parseLong(id);
+		queryService.addToViewed(name, videoId);
+		return "qqqqqqq";
+	}
+
+	@GetMapping("/addToLiked/{id}/{name}")
+	public String addToLiked(@PathVariable(value = "id") String id, @PathVariable(value = "name") String name) {
+		Long videoId = Long.parseLong(id);
+		queryService.addToLiked(name, videoId);
+		return "qqqqqqq";
+	}
 
 }

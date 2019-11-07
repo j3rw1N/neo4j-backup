@@ -34,8 +34,11 @@ public class User {
 	private Set<String> newsPreferences;
 	@Relationship(type = "PUBLISHED", direction = Relationship.OUTGOING)
 	private Set<Post> publishedPosts;
-
+	@Relationship(type = "userLocation")
+	private Location location;
 	@Relationship(type = "VIEWED", direction = Relationship.OUTGOING)
 	private Set<Post> viewedPosts;
+	@Relationship(type="LIKED", direction = Relationship.OUTGOING)
+	private Set<Post> likedPosts;
 
 }

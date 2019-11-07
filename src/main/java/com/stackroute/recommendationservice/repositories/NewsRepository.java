@@ -9,7 +9,7 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.data.rest.core.annotation.RepositoryRestResource;
 
 
-@RepositoryRestResource(collectionResourceRel = "movies", path = "movies")
+@RepositoryRestResource()
 public interface NewsRepository extends Neo4jRepository<Post, Long> {
 
 	Post findByTitle(@Param("title") String title);
@@ -30,4 +30,38 @@ public interface NewsRepository extends Neo4jRepository<Post, Long> {
 
 	@Query("MATCH (l:Location) where l.name={name} MATCH (p:Post)-[:NEWS_LOCATION]->(l) return p")
     Collection<Post> byLocation(@Param("name") String name);
+
+	@Query("MATCH (c:SubCategory) where c.name={categoryName} MATCH (p:Post)-[:BelongsTo]->(c) return p")
+	Collection<Post> byCategory(@Param("categoryName") String categoryName);
+
+	//Most liked category
+	@Query("MATCH (user:User)-[:LIKED]->(n:Post) where user.username={userName}\n" +
+			"MATCH (n)-[:BelongsTo]->(subcategory)\n" +
+			"\t\tWITH subcategory.name as mostLiked, count(subcategory) as total, collect(n) as viewedNews\n" +
+			"\t\torder by count(subcategory) DESC LIMIT 1\n" +
+			"\n" +
+			"MATCH (recommend:Post)-[:BelongsTo]->(sub :SubCategory) where sub.name=mostLiked and not recommend in viewedNews\n" +
+			"return distinct recommend")
+	Collection<Post> mostLikedCategory(@Param("userName")String userName);
+
+	//Most viewed category
+	@Query("MATCH (user:User)-[:VIEWED]->(n:Post) where user.username={userName}\n" +
+			"MATCH (n)-[:BelongsTo]->(subcategory)\n" +
+			"\t\tWITH subcategory.name as mostViewed, count(subcategory) as total, collect(n) as viewedNews\n" +
+			"\t\torder by count(subcategory) DESC LIMIT 1\n" +
+			"\n" +
+			"MATCH (recommend:Post)-[:BelongsTo]->(sub:SubCategory) where sub.name = mostViewed\n" +
+			"and not recommend in viewedNews\n" +
+			"return distinct recommend")
+	Collection<Post> mostViewedCategory(@Param("userName")String userName);
+
+	//Recommend by location and other profile parameters
+	@Query("MATCH (user:User)-[:VIEWED]->(n:Post) where user.username={userName} WITH collect(n) as viewedNews\n" +
+			"MATCH (user:User)-[:userLocation]->(l:Location) where user.username={userName}\n" +
+			"MATCH (recommend:Post)-[:NEWS_LOCATION]->(l)\n" +
+			"\t\twhere not recommend in viewedNews\n" +
+			"OPTIONAL MATCH ()-[r:VIEWED]->(recommend)\n" +
+			"\t\treturn recommend, count(r)\n" +
+			"\t\torder by count(r) desc")
+	Collection<Post> byProfile(@Param("userName") String userName);
 }

@@ -1,16 +1,13 @@
 package com.stackroute.recommendationservice.services;
 
-import com.fasterxml.jackson.core.JsonParseException;
-import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.stackroute.recommendationservice.domain.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.HashSet;
-import java.util.List;
+import java.util.Random;
 import java.util.Set;
 
 @Service
@@ -22,14 +19,12 @@ public class RabbitMqReceiver {
     public void receivePosts(String message) {
         PostDTO postDTO;
         try {
-            System.out.println(message);
             postDTO = new ObjectMapper().readValue(message, PostDTO.class);
-            System.out.println("after mapped");
             Post post = Post.builder()
                     .videoID(postDTO.getId())
                     .title(postDTO.getTitle())
                     .videoURL(postDTO.getVideoUrl())
-                    .category(postDTO.getCategory())
+                    .subCategory(new SubCategory(postDTO.getCategory(), null, null))
                     .location(new Location(postDTO.getLocation(), null, null))
                     .tags(postDTO.getTags())
                     .build();
@@ -57,8 +52,12 @@ public class RabbitMqReceiver {
         try {
             System.out.println(message);
             userDTO = new ObjectMapper().readValue(message, UserDTO.class);
+            String[] locations = {"Bangalore", "Kolkata", "Pondicherri", "Kerala", "Bihar", "UP"};
+            Random r = new Random();
+            int index = r.nextInt(locations.length);
             user = User.builder()
                     .username(userDTO.getUsername())
+                    .location(new Location(locations[index], null, null))
                     .build();
         } catch (IOException e) {
             e.printStackTrace();
